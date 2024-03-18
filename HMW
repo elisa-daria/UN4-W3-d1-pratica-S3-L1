@@ -1,0 +1,29 @@
+UN4-W3-D1
+
+CREATE TABLE IF NOT EXISTS public.clienti
+(
+    cliente_id integer NOT NULL DEFAULT nextval('clienti_cliente_id_seq'::regclass),
+    nome character varying(25) COLLATE pg_catalog."default" NOT NULL,
+    cognome character varying(25) COLLATE pg_catalog."default" NOT NULL,
+    anno_di_nascita integer NOT NULL,
+    regione_residenza character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT clienti_pkey PRIMARY KEY (cliente_id)
+)
+
+
+SELECT nome,cognome,anno_di_nascita FROM clienti WHERE nome ILIKE '%mario%'
+
+SELECT * FROM clienti WHERE nome='mario'
+
+SELECT * FROM clienti WHERE anno_di_nascita=1982
+
+SELECT tipologia, COUNT(*) FROM fatture WHERE iva=20 GROUP BY tipologia 
+
+SELECT * FROM prodotti WHERE EXTRACT ( YEAR FROM data_attivazione)=2017 AND in_produzione='y' OR in_commercio='y'
+
+SELECT fatture.*, clienti.* FROM fatture JOIN clienti ON fatture.id_cliente=clienti.cliente_id WHERE importo < 1000;
+
+
+SELECT fatture.fattura_id, fatture.importo, fatture.iva, fatture.data_fattura, fornitori.fornitore_id AS nome_fornitore
+FROM fatture
+JOIN fornitori ON fatture.id_fornitore = fornitori.fornitore_id;
