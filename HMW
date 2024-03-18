@@ -9,6 +9,46 @@ CREATE TABLE IF NOT EXISTS public.clienti
     regione_residenza character varying(20) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT clienti_pkey PRIMARY KEY (cliente_id)
 )
+CREATE TABLE IF NOT EXISTS public.fatture
+(
+    fattura_id integer NOT NULL DEFAULT nextval('fatture_fattura_id_seq'::regclass),
+    tipologia character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    importo double precision NOT NULL,
+    iva double precision NOT NULL,
+    id_cliente integer,
+    id_fornitore integer,
+    data_fattura date,
+    CONSTRAINT fatture_pkey PRIMARY KEY (fattura_id),
+    CONSTRAINT fatture_id_cliente_fkey FOREIGN KEY (id_cliente)
+        REFERENCES public.clienti (cliente_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT fatture_id_fornitore_fkey FOREIGN KEY (id_fornitore)
+        REFERENCES public.fornitori (fornitore_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+CREATE TABLE IF NOT EXISTS public.fornitori
+(
+    fornitore_id integer NOT NULL DEFAULT nextval('fornitori_fornitore_id_seq'::regclass),
+    denominazione character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    regione_residenza character varying(30) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT fornitori_pkey PRIMARY KEY (fornitore_id)
+)
+CREATE TABLE IF NOT EXISTS public.prodotti
+(
+    prodotto_id integer NOT NULL DEFAULT nextval('prodotti_prodotto_id_seq'::regclass),
+    descrizione character varying(300) COLLATE pg_catalog."default",
+    in_produzione character varying(15) COLLATE pg_catalog."default" NOT NULL,
+    in_commercio character varying(15) COLLATE pg_catalog."default" NOT NULL,
+    data_attivazione date NOT NULL,
+    data_disattivazione date NOT NULL,
+    CONSTRAINT prodotti_pkey PRIMARY KEY (prodotto_id)
+)
+
+
 
 
 SELECT nome,cognome,anno_di_nascita FROM clienti WHERE nome ILIKE '%mario%'
